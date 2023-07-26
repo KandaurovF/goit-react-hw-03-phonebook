@@ -1,0 +1,13 @@
+.filterWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.searchIcon {
+  margin-right: 10px;
+}
+
+.searchInput {
+  padding: 5px;
+}
