@@ -2,9 +2,9 @@ import { Component } from 'react';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Modal from './Modal';
+import IconButton from './IconButton';
+import { ImUserPlus, ImCancelCircle } from 'react-icons/im';
 export class App extends Component {
   state = {
     contacts: [
@@ -15,7 +15,7 @@ export class App extends Component {
     ],
     showModal: false,
     filter: '',
-    showFilter: false,
+    // showFilter: false,
   };
 
   componentDidMount() {
@@ -59,18 +59,18 @@ export class App extends Component {
     }));
   };
 
-  toggleFilter = () => {
-    this.setState(prevState => ({
-      showFilter: !prevState.showFilter,
-    }));
-  };
+  // toggleFilter = () => {
+  //   this.setState(prevState => ({
+  //     showFilter: !prevState.showFilter,
+  //   }));
+  // };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   render() {
-    const { contacts, filter, showFilter, showModal } = this.state;
+    const { contacts, filter, showModal } = this.state;
 
     const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -79,30 +79,29 @@ export class App extends Component {
     return (
       <div className="wrapper">
         <h1 className="main__heading">Phonebook</h1>
-        <button type="button" onClick={this.toggleModal}>
-          Open modal
-        </button>
+
         {showModal && (
           <Modal onClose={this.toggleModal}>
-            <button type="button" onClick={this.toggleModal}>
-              Close modal
-            </button>
+            <IconButton onClick={this.toggleModal}>
+              <ImCancelCircle fill="#000" />
+            </IconButton>
+
             <ContactForm onFormSubmit={this.addContact} />
           </Modal>
         )}
 
-        <h2 className="secondary__heading" onClick={this.toggleFilter}>
-          Contacts
-          <FontAwesomeIcon icon={faSearch} className="searchIcon" />
-        </h2>
+        <div className="contacts__header">
+          <h2 className="secondary__heading">Contacts</h2>
+          <IconButton onClick={this.toggleModal}>
+            <ImUserPlus size={20} fill="#000" />
+          </IconButton>
+        </div>
 
-        {showFilter && (
-          <Filter
-            value={filter}
-            onChange={this.handleSearch}
-            contacts={contacts}
-          />
-        )}
+        <Filter
+          value={filter}
+          onChange={this.handleSearch}
+          contacts={contacts}
+        />
 
         {filter === '' ? (
           <ContactList

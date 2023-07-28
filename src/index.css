@@ -46,14 +46,9 @@ p {
   margin-bottom: 15px;
 }
 
-.secondary__heading {
-  margin-bottom: 20px;
+.contacts__header {
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.searchIcon {
-  width: 15px;
-  height: 15px;
 }
