@@ -4,18 +4,34 @@ import ContactList from './ContactList';
 import Filter from './Filter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
+import Modal from './Modal';
 export class App extends Component {
   state = {
     contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+      // { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      // { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      // { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      // { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
+    showModal: false,
     filter: '',
     showFilter: false,
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contats) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = formData => {
     const { name } = formData;
@@ -49,8 +65,12 @@ export class App extends Component {
     }));
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
   render() {
-    const { contacts, filter, showFilter } = this.state;
+    const { contacts, filter, showFilter, showModal } = this.state;
 
     const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -59,14 +79,30 @@ export class App extends Component {
     return (
       <div className="wrapper">
         <h1 className="main__heading">Phonebook</h1>
-        <ContactForm onFormSubmit={this.addContact} />
+        <button type="button" onClick={this.toggleModal}>
+          Open modal
+        </button>
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <button type="button" onClick={this.toggleModal}>
+              Close modal
+            </button>
+            <ContactForm onFormSubmit={this.addContact} />
+          </Modal>
+        )}
 
         <h2 className="secondary__heading" onClick={this.toggleFilter}>
           Contacts
           <FontAwesomeIcon icon={faSearch} className="searchIcon" />
         </h2>
 
-        {showFilter && <Filter value={filter} onChange={this.handleSearch} />}
+        {showFilter && (
+          <Filter
+            value={filter}
+            onChange={this.handleSearch}
+            contacts={contacts}
+          />
+        )}
 
         {filter === '' ? (
           <ContactList
