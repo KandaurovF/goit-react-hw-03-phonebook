@@ -2,9 +2,10 @@ import { Component } from 'react';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
-import Modal from './Modal';
 import IconButton from './IconButton';
-import { ImUserPlus, ImCancelCircle } from 'react-icons/im';
+import Modal from './Modal';
+
+import { ImUserPlus } from 'react-icons/im';
 export class App extends Component {
   state = {
     contacts: [
@@ -15,7 +16,6 @@ export class App extends Component {
     ],
     showModal: false,
     filter: '',
-    // showFilter: false,
   };
 
   componentDidMount() {
@@ -45,6 +45,7 @@ export class App extends Component {
       this.setState(prevState => ({
         contacts: [formData, ...prevState.contacts],
       }));
+      this.toggleModal();
     }
   };
 
@@ -58,12 +59,6 @@ export class App extends Component {
       contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
-
-  // toggleFilter = () => {
-  //   this.setState(prevState => ({
-  //     showFilter: !prevState.showFilter,
-  //   }));
-  // };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
@@ -79,41 +74,38 @@ export class App extends Component {
     return (
       <div className="wrapper">
         <h1 className="main__heading">Phonebook</h1>
+        <div className="container">
+          {showModal && (
+            <Modal onClose={this.toggleModal}>
+              <ContactForm onFormSubmit={this.addContact} />
+            </Modal>
+          )}
 
-        {showModal && (
-          <Modal onClose={this.toggleModal}>
+          <div className="contacts__header">
+            <h2 className="secondary__heading">Contacts</h2>
             <IconButton onClick={this.toggleModal}>
-              <ImCancelCircle fill="#000" />
+              <ImUserPlus size={20} fill="#000" />
             </IconButton>
+          </div>
 
-            <ContactForm onFormSubmit={this.addContact} />
-          </Modal>
-        )}
-
-        <div className="contacts__header">
-          <h2 className="secondary__heading">Contacts</h2>
-          <IconButton onClick={this.toggleModal}>
-            <ImUserPlus size={20} fill="#000" />
-          </IconButton>
-        </div>
-
-        <Filter
-          value={filter}
-          onChange={this.handleSearch}
-          contacts={contacts}
-        />
-
-        {filter === '' ? (
-          <ContactList
+          <Filter
+            value={filter}
+            onChange={this.handleSearch}
             contacts={contacts}
-            onDeleteContact={this.deleteContact}
           />
-        ) : (
-          <ContactList
-            contacts={filteredContacts}
-            onDeleteContact={this.deleteContact}
-          />
-        )}
+
+          {filter === '' ? (
+            <ContactList
+              contacts={contacts}
+              onDeleteContact={this.deleteContact}
+            />
+          ) : (
+            <ContactList
+              contacts={filteredContacts}
+              onDeleteContact={this.deleteContact}
+            />
+          )}
+        </div>
       </div>
     );
   }

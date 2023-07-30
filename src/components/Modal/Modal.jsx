@@ -1,5 +1,7 @@
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
+import IconButton from '../IconButton';
+import { ImCross } from 'react-icons/im';
 import css from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
@@ -25,10 +27,18 @@ export default class Modal extends Component {
     }
   };
 
+  handleClose = e => {
+    this.props.onClose();
+  };
+
   render() {
     return createPortal(
       <div className={css.backdrop} onClick={this.handleBackdropClick}>
-        <div className={`wrapper ${css.modal__content}`}>
+        <div className={`${css.modal__content} `}>
+          <IconButton className={css.close__button} onClick={this.handleClose}>
+            <ImCross fill="#000" />
+          </IconButton>
+
           {this.props.children}
         </div>
       </div>,

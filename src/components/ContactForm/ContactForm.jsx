@@ -17,34 +17,49 @@ const ContactForm = ({ onFormSubmit }) => {
   };
 
   return (
-    <Formik
-      initialValues={INITIAL_VALUES}
-      validationSchema={schema}
-      onSubmit={hendleSubmit}
-    >
-      <Form className={css.form}>
-        <label className={css.label} htmlFor={inputNameId}>
-          Name
-          <Field name="name" id={inputNameId} type="text" />
-          <ErrorMessage
-            className={css.errorMessage}
-            name="name"
-            component="p"
-          />
-        </label>
+    <>
+      <h2 className={css.form__heading}>Add contact</h2>
+      <Formik
+        initialValues={INITIAL_VALUES}
+        validationSchema={schema}
+        onSubmit={hendleSubmit}
+      >
+        <Form className={css.form}>
+          <label className={css.label} htmlFor={inputNameId}>
+            <Field
+              className={css.input}
+              name="name"
+              id={inputNameId}
+              type="text"
+              placeholder=" "
+            />
+            <span>Name</span>
+            <ErrorMessage
+              className={css.errorMessage}
+              name="name"
+              component="p"
+            />
+          </label>
 
-        <label className={css.label} htmlFor={inputNumberId}>
-          Number
-          <Field name="number" id={inputNumberId} type="tel" />
-          <ErrorMessage
-            className={css.errorMessage}
-            name="number"
-            component="p"
-          />
-        </label>
-        <button type="submit">Add contact</button>
-      </Form>
-    </Formik>
+          <label className={css.label} htmlFor={inputNumberId}>
+            <Field
+              className={css.input}
+              name="number"
+              id={inputNumberId}
+              type="tel"
+              placeholder=" "
+            />
+            <span>Number</span>
+            <ErrorMessage
+              className={css.errorMessage}
+              name="number"
+              component="p"
+            />
+          </label>
+          <button type="submit">Add contact</button>
+        </Form>
+      </Formik>
+    </>
   );
 };
 
